@@ -1,6 +1,6 @@
 [Setup]
-AppName=Channel Soundboard v3 Balram Sevak
-AppVersion=1.1
+AppName=Channel Soundboard v1.3 Balram Sevak
+AppVersion=1.3
 DefaultDirName={autopf}\ChannelSoundboard
 DefaultGroupName=Channel Soundboard
 OutputDir=installer
