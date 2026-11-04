@@ -1,5 +1,5 @@
 [Setup]
-AppName=Channel Soundboard v1.3 Balram Sevak
+AppName=Channel Soundboard v1.3
 AppVersion=1.3
 DefaultDirName={autopf}\ChannelSoundboard
 DefaultGroupName=Channel Soundboard
