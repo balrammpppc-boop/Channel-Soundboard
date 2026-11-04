@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
 import engine
 from engine import Chan, Master, Fx, fmt
 
-APP = "Channel Soundboard"
+APP = "Channel Soundboard v7 - Balram Sevak"
 DATA = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~/.config"), "ChannelSoundboard")
 LIB = os.path.join(DATA, "library.json")
 CSS = """
@@ -80,6 +80,7 @@ class Strip(QFrame):
         super().__init__(); s.ch, s.m = ch, m; s.setObjectName("strip"); s.setFixedWidth(104)
         v = QVBoxLayout(s); v.setContentsMargins(6, 8, 6, 8); v.setSpacing(6)
         s.dev = QPushButton(); s.dev.clicked.connect(lambda: m.dev_menu(ch, s.dev)); v.addWidget(s.dev)
+        s.cue_btn = QPushButton("🎧 Cue"); s.cue_btn.setCheckable(True); s.cue_btn.setChecked(ch.cue); s.cue_btn.toggled.connect(s.set_cue); v.addWidget(s.cue_btn)
         s.mute = QPushButton(); s.mute.setCheckable(True); s.mute.setChecked(ch.mute); s.mute.toggled.connect(s.setm); v.addWidget(s.mute); s.setm(ch.mute, False)
         s.play = QPushButton("▶"); s.play.setObjectName("play"); s.play.setFixedSize(46, 46); s.play.clicked.connect(lambda: m.toggle(ch))
         v.addWidget(s.play, 0, Qt.AlignHCenter); v.addSpacing(12)
@@ -89,6 +90,11 @@ class Strip(QFrame):
         s.nm = QPushButton(); s.nm.clicked.connect(lambda: m.name_menu(ch, s.nm)); v.addWidget(s.nm)
         s.du = QLabel(fmt(ch.dur)); s.du.setAlignment(Qt.AlignCenter); s.du.setStyleSheet("color:#9aa0ad;font-size:11px"); v.addWidget(s.du)
         s.refresh()
+      
+    def set_cue(self, x):
+        self.ch.cue = bool(x)
+        self.cue_btn.setText("🎧 Cued" if x else "🎧 Cue")
+        s.m.save()
 
     def setm(s, x, save=True):
         s.ch.mute = bool(x); s.mute.setText("🔇 Muted" if x else "🔊 Mute")
@@ -131,6 +137,7 @@ class Main(QMainWindow):
         s.endc = QComboBox(); s.endc.addItems(["⏹ Stop", "🔁 Repeat", "⏭ Continue"]); s.endc.setCurrentIndex(2); s.endc.currentIndexChanged.connect(lambda i: (setattr(s, "mode", i), s.save())); l.addWidget(s.endc)
         s.bt = QPushButton("⏲ Timer"); s.bt.clicked.connect(s.timer_dialog); l.addWidget(s.bt)
         s.be = QPushButton("EQ / Bass boost"); s.be.clicked.connect(s.eq_dialog); l.addWidget(s.be)
+        s.ba = QPushButton("ℹ About / Creator"); s.ba.clicked.connect(s.about_dialog); l.addWidget(s.ba)
         r = QHBoxLayout(); l.addLayout(r); s.tot = QPushButton("⏱ 0:00 / 0:00"); s.tot.setFlat(True); s.tot.setStyleSheet("text-align:left;border:0;color:#9aa0ad;font-size:11px"); s.tot.setToolTip("Played / total. Click to reset the played time"); s.tot.clicked.connect(s.reset_played); r.addWidget(s.tot, 1)
         c = QPushButton("Clear"); c.clicked.connect(s.clear_all); r.addWidget(c)
         l.addStretch(1)
@@ -141,7 +148,16 @@ class Main(QMainWindow):
         s.area = QScrollArea(); s.area.setWidgetResizable(True); h.addWidget(s.area, 1)
         s.load(); s.rebuild()
         t = QTimer(s); t.timeout.connect(s.tick); t.start(100)
-
+      
+    def about_dialog(s):
+        d = QDialog(s); d.setWindowTitle("About Channel Soundboard")
+        v = QVBoxLayout(d)
+        v.addWidget(QLabel("<h2>Channel Soundboard v7</h2>"))
+        v.addWidget(QLabel("<b>Creator:</b> Balram Sevak"))
+        v.addWidget(QLabel("<p>A professional multi-channel audio routing tool with DJ features, custom device selection, cue/pre-listen, and equalizers.</p>"))
+        ok = QPushButton("Close"); ok.clicked.connect(d.accept); v.addWidget(ok)
+        d.exec()
+      
     # ---- library
     def save(s):
         try:
