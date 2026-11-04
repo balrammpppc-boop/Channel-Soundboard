@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
 import engine
 from engine import Chan, Master, Fx, fmt
 
-APP = "Channel Soundboard v7 - Balram Sevak"
+APP = "Channel Soundboard v3 - Balram Sevak"
 DATA = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~/.config"), "ChannelSoundboard")
 LIB = os.path.join(DATA, "library.json")
 CSS = """
