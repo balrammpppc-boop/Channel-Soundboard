@@ -105,6 +105,7 @@ class Chan:
         self.name = name or os.path.splitext(os.path.basename(path))[0]
         self.dur, self.vol, self.dev = dur, vol, dev
         self.mute = False                              # per-channel mute (dev = device name, None = default output)
+        self.cue = False  # Pre-listen / Cue state
         self.sf = self.stream = None
         self.sr, self.total = 44100, 0
         self.lock = threading.Lock()
@@ -133,11 +134,11 @@ class Chan:
         return self.sf
 
     def _dev_index(self):
-        if self.dev:
-            for i, n in outputs():
-                if self.dev == n or self.dev in n:
-                    return i
-        return default_output()
+    if self.dev:
+        for i, n in outputs():
+            if self.dev == n or self.dev in n:
+                return i
+    return default_output()
 
     def ensure_stream(self):
         if self.stream is not None:
