@@ -135,7 +135,7 @@ class Chan:
     def _dev_index(self):
         if self.dev:
             for i, n in outputs():
-                if n == self.dev:
+                if self.dev == n or self.dev in n:
                     return i
         return default_output()
 
@@ -170,9 +170,7 @@ class Chan:
 
     def set_device(self, name):
         self.dev = name or None
-        if self.stream is not None:
-            self.close_stream()
-            self.ensure_stream()
+        self.close_stream()
 
     # ---- audio callback (runs on the audio thread)
     def _cb(self, out, frames, t, status):
