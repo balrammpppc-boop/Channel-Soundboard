@@ -17,7 +17,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
       - name: Build program
-        run: pyinstaller --noconfirm --windowed --name ChannelSoundboard --icon icon.ico --add-data "icon.png;." --collect-all sounddevice --collect-all soundfile app.py
+        run: pyinstaller --noconfirm --windowed --name ChannelSoundboard --icon icon.ico --add-data "engine.py;." --add-data "icon.png;." --hidden-import=engine --collect-all sounddevice --collect-all soundfile app.py
       - name: Build installer
         run: |
           choco install innosetup -y --no-progress
