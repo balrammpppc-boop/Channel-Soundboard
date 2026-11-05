@@ -93,8 +93,17 @@ class Strip(QFrame):
       
     def set_cue(self, x):
         self.ch.cue = bool(x)
-        self.cue_btn.setText("🎧 Cued" if x else "🎧 Cue")
-        s.m.save()
+        if x:
+            self.cue_btn.setText("🎧 Cued (Muted Main)")
+            self.cue_btn.setStyleSheet("background-color: #ff9800; color: white;")
+        else:
+            self.cue_btn.setText("🎧 Cue")
+            self.cue_btn.setStyleSheet("")
+            
+        # यदि स्ट्रीम चल रही है, तो डिवाइस रीफ्रेश करें ताकि राउटिंग तुरंत लागू हो
+        if self.ch.stream and self.ch.stream.active:
+            self.ch.stop()
+            self.ch.play()
 
     def setm(s, x, save=True):
         s.ch.mute = bool(x); s.mute.setText("🔇 Muted" if x else "🔊 Mute")
