@@ -100,9 +100,9 @@ class Strip(QFrame):
             self.cue_btn.setText("🎧 Cue")
             self.cue_btn.setStyleSheet("")
             
-        if self.ch.stream and self.ch.stream.active:
-            self.ch.stop()
-            self.ch.play()
+        # गाना रोके बिना अपने आप हेडफोन या मेन आउटपुट पर स्विच हो जाएगा
+        if hasattr(self.ch, 'switch_device'):
+            self.ch.switch_device()
 
     def setm(s, x, save=True):
         s.ch.mute = bool(x); s.mute.setText("🔇 Muted" if x else "🔊 Mute")
