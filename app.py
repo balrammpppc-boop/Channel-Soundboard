@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
 import engine
 from engine import Chan, Master, Fx, fmt
 
-APP = "Channel Soundboard v3 - Balram Sevak"
+APP = "Channel Soundboard v7 - Balram Sevak"
 DATA = os.path.join(os.environ.get("APPDATA") or os.path.expanduser("~/.config"), "ChannelSoundboard")
 LIB = os.path.join(DATA, "library.json")
 CSS = """
@@ -94,7 +94,7 @@ class Strip(QFrame):
     def set_cue(self, x):
         self.ch.cue = bool(x)
         if x:
-            self.cue_btn.setText("🎧 Cued (Muted Main)")
+            self.cue_btn.setText("🎧 Cued")
             self.cue_btn.setStyleSheet("background-color: #ff9800; color: white;")
         else:
             self.cue_btn.setText("🎧 Cue")
