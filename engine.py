@@ -178,6 +178,10 @@ class Chan:
 
     # ---- audio callback (runs on the audio thread)
     def _cb(self, out, frames, t, status):
+        # Cue ऑन होने पर मेन आउटपुट को म्यूट (Silent) करने के लिए
+        if getattr(self, 'cue', False):
+            out.fill(0)
+            return
         if not self.playing and self.gain <= 0.0:
             out.fill(0)
             return
