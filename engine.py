@@ -245,3 +245,14 @@ class Chan:
         self.open()
         with self.lock:
             self.sf.seek(int(max(0, min(sec * self.sr, self.total - 1))))
+
+    def switch_device(self):
+        # बिना गाना रोके या पोजीशन खोए डिवाइस स्विच करने के लिए
+        current_sec = self.pos()
+        if self.stream:
+            self.stream.stop()
+            self.stream.close()
+            self.stream = None
+        self.ensure_stream()
+        if current_sec > 0:
+            self.seek(current_sec)
