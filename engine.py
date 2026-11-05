@@ -82,3 +82,10 @@ class Chan:
             self.stream = None
         if self.sf:
             self.sf.seek(0)
+
+    class Master:
+        def __init__(self):
+            self.volume = 1.0
+
+        def set_volume(self, v):
+            self.volume = float(v)
