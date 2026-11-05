@@ -134,11 +134,11 @@ class Chan:
         return self.sf
 
     def _dev_index(self):
-    if self.dev:
+        if self.dev:
         for i, n in outputs():
             if self.dev == n or self.dev in n:
                 return i
-    return default_output()
+        return default_output()
 
     def ensure_stream(self):
         if self.stream is not None:
