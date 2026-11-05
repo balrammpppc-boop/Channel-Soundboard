@@ -134,9 +134,21 @@ class Chan:
         return self.sf
 
     def _dev_index(self):
+        # अगर Cue ऑन है, तो यह अपने आप हेडफोन/हेडसेट को ढूंढकर आवाज उधर भेज देगा
         if getattr(self, 'cue', False):
-            # जब Cue ऑन हो, तो हेडफोन/प्री-लिस्निंग आउटपुट का उपयोग करें
+            # पहले चेक करेगा कि क्या कोई खास क्यू डिवाइस सेट है
+            if hasattr(self, 'cue_dev') and self.cue_dev is not None:
+                return self.cue_dev
+            
+            # ऑटो-डिटेक्ट: डिवाइस के नाम में Headphone या Headset ढूंढकर अपने आप चुन लेगा
+            for i, n in outputs():
+                if 'headphone' in n.lower() or 'headset' in n.lower() or 'earphone' in n.lower():
+                    return i
+            
+            # अगर नाम से न मिले, तो डिफ़ॉल्ट आउटपुट का उपयोग करेगा
             return default_output()
+        
+        # सामान्य स्थिति में आपके द्वारा चुने गए मेन डिवाइस पर बजेगा
         if self.dev:
             for i, n in outputs():
                 if self.dev == n or self.dev in n:
